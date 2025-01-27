@@ -1,15 +1,10 @@
-package com.example.moviestutapp
+package com.example.moviestutapp.screens.home
 
-import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,12 +19,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,28 +30,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.moviestutapp.navigation.MovieNavigation
-import com.example.moviestutapp.ui.theme.MoviesTutAppTheme
+import androidx.navigation.NavController
+import com.example.moviestutapp.MyApp
+import com.example.moviestutapp.model.Movie
+import com.example.moviestutapp.model.getMovies
+import com.example.moviestutapp.navigation.MovieScreen
+import com.example.moviestutapp.widgets.MovieRow
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MyApp {
-                MovieNavigation()
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen(navController: NavController) {
+    Scaffold(topBar = {
+        TopAppBar(
+            title = { Text(text = "Movies") }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.LightGray
+            ), modifier = Modifier.shadow(elevation = 5.dp)
+        )
+    }) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            MainContent(navController = navController)
+
+        }
+    }
+}
+
+@Composable
+fun MainContent(
+    navController: NavController,
+    movieList: List<Movie> = getMovies()
+) {
+    LazyColumn() {
+        items(items = movieList) {
+            MovieRow(movie = it) { movie ->
+                navController.navigate(route = MovieScreen.DetailsScreen.name + "/$movie")
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyApp(content: @Composable () -> Unit) {
-    MoviesTutAppTheme {
-        content()
-    }
-}
+
+

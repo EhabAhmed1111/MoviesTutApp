@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.moviestutapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.moviestutapp"
@@ -66,4 +66,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //coil for image
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    //navigation
+    implementation(libs.androidx.navigation.compose)
+
 }
